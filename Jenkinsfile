@@ -16,6 +16,14 @@ pipeline {
             }
         }
 
+        stage('Python Dependencies') {
+            steps {
+                sh '''
+                    python3 -m pip install --no-cache-dir -r app/requirements.txt
+                '''
+            }
+        }
+
         stage('Python Tests') {
             steps {
                 sh '''
@@ -67,11 +75,8 @@ pipeline {
         stage('Smoke Test') {
             steps {
                 sh '''
-                    kubectl -n ${NAMESPACE} \
-                      get pods
-
-                    kubectl -n ${NAMESPACE} \
-                      get service ${APP_NAME}
+                    kubectl -n ${NAMESPACE} get pods
+                    kubectl -n ${NAMESPACE} get service ${APP_NAME}
                 '''
             }
         }
