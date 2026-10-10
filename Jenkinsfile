@@ -7,6 +7,7 @@ pipeline {
         IMAGE_TAG  = "1.0.${BUILD_NUMBER}"
         NAMESPACE  = "production-demo"
         VENV       = ".venv"
+        KUBECONFIG = "/var/jenkins_home/.kube/config-jenkins"
     }
 
     stages {
@@ -82,6 +83,9 @@ pipeline {
             steps {
                 sh '''
                     set -eu
+
+                    echo "Checking Kubernetes connectivity..."
+                    kubectl get nodes
 
                     echo "Applying Kubernetes manifests..."
                     kubectl apply -f k8s/deployment.yaml
